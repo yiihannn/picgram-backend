@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'rest_framework',
     'graphene_django',
+    'ebhealthcheck.apps.EBHealthCheckConfig'
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,6 @@ DATABASES = {
     }
 }
 
-
 mongoengine.connect(db='photosharing_django', host='127.0.0.1', port=27017, authentication_source='admin')
 
 # Password validation
@@ -124,13 +124,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+STATIC_ROOT = 'static/'
 STATIC_URL = 'static/'
 MEDIA_ROOT = 'media/'
 MEDIA_URL = 'media/'
 
 STATICFILES_DIRS = [
-    "/Users/annyshi/Library/Mobile Documents/com~apple~CloudDocs/Stanford/2021 winter/CS 142/project8/compiled",
+    "/Users/annyshi/Library/Mobile Documents/com~apple~CloudDocs/Stanford/2022 fall/React Project/photo-sharing-website/build",
 ]
 
 # Default primary key field type

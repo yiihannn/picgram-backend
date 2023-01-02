@@ -1,17 +1,17 @@
 <!doctype html>
-<!-- React.js applications are written in JavaScript but you need an
-     HTML document to load the JavaScript. This HTML loads the React.js
-     component Example -->
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>CS142 Class Project</title>
-        <!-- Insert the model data for the Example widet into the DOM -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-    </head>
-    <body>
-        <div id="photoshareapp"></div>
-        {% load static %}
-        <script src={% static 'photoShare.bundle.js' %}></script>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <meta name="description" content="Web site created using create-react-app"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+    <title>Photo Sharing App</title>
+    {% load static %}
+    <script defer="defer" src={% static 'static/js/main.eb83b5a0.js' %}></script>
+    <link href="{% static '/static/css/main.abd64e84.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div id="root"></div>
+</body>
 </html>
