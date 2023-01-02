@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-*gd09-rr76a#syk2svu@15+cw5@k1%nv^0=++@sm9$v0k=+n^5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'photoSharing-dev.us-west-2.elasticbeanstalk.com'
+]
 
 # Application definition
 
@@ -76,16 +78,28 @@ WSGI_APPLICATION = 'photoSharing.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'photo_sharing',
-        'USER': 'postgres',
-        'PASSWORD': 'example',
-        'HOST': '127.0.0.1',
-        'PORT': '6667',
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'photo_sharing',
+            'USER': 'postgres',
+            'PASSWORD': 'example',
+            'HOST': '127.0.0.1',
+            'PORT': '6667',
+        }
+    }
 
 mongoengine.connect(db='photosharing_django', host='127.0.0.1', port=27017, authentication_source='admin')
 
