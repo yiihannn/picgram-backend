@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 import mongoengine
 
@@ -144,3 +144,12 @@ GRAPHENE = {
         'webserver.graphql.customMiddleware.AuthorizationMiddleware',
     ],
 }
+
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = 'photo-sharing-files'
+AWS_S3_REGION_NAME = 'us-west-2'
+AWS_S3_CUSTOM_DOMAIN = 'd1x8dwmr26hltj.cloudfront.net'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
