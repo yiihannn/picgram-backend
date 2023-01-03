@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-*gd09-rr76a#syk2svu@15+cw5@k1%nv^0=++@sm9$v0k=+n^5
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
     'picgram.net',
     'photoSharing-dev.us-west-2.elasticbeanstalk.com'
 ]
