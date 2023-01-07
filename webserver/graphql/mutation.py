@@ -39,10 +39,10 @@ class SignUp(relay.ClientIDMutation):
         first_name = graphene.String(required=True)
         last_name = graphene.String(required=True)
         password = graphene.String(required=True)
-        email = graphene.String(required=True)
-        location = graphene.String(required=True)
-        description = graphene.String(required=True)
-        occupation = graphene.String(required=True)
+        email = graphene.String()
+        location = graphene.String()
+        description = graphene.String()
+        occupation = graphene.String()
 
     user = graphene.Field(UserNode)
 
