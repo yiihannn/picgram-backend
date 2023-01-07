@@ -138,6 +138,31 @@ class UploadPhoto(relay.ClientIDMutation):
         return UploadPhoto(code=2000, msg="Make comment successfully!")
 
 
+class FollowUser(relay.ClientIDMutation):
+    code = graphene.Int()
+    msg = graphene.String()
+
+    class Input:
+        user_id = graphene.String(required=True)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        if input['user_id'] == info.context.user.id:
+            return FollowUser(code=2001, msg="Invalid self-following!")
+        user = User.objects.get(pk=parse_global_id(input['user_id']))
+        curr_user = User.objects.get(pk=info.context.user.id)
+        isFollowed = curr_user.profile.following.contains(user)
+        if isFollowed:
+            curr_user.profile.following.remove(user)
+            user.profile.follower.remove(curr_user)
+        else:
+            curr_user.profile.following.add(user)
+            user.profile.follower.add(curr_user)
+        curr_user.save()
+        user.save()
+        return FollowUser(code=2000, msg="Follow(or unfollow) user successfully!")
+
+
 class Mutation(graphene.ObjectType):
     log_in = LogIn.Field()
     sign_up = SignUp.Field()
@@ -145,3 +170,4 @@ class Mutation(graphene.ObjectType):
     like_photo = LikePhoto.Field()
     make_comment = MakeComment.Field()
     upload_photo = UploadPhoto.Field()
+    follow_user = FollowUser.Field()

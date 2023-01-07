@@ -76,6 +76,7 @@ class UserFilter(FilterSet):
 
 class UserNode(DjangoObjectType):
     user_photos = DjangoFilterConnectionField(PhotoNode, filterset_class=PhotoFilter)
+    is_followed_by_curr = graphene.Boolean()
 
     class Meta:
         model = User
@@ -84,6 +85,10 @@ class UserNode(DjangoObjectType):
 
     def resolve_user_photos(self, info, **kwargs):
         return PhotoFilter(kwargs, queryset=self.user_photos).qs
+
+    def resolve_is_followed_by_curr(self, info):
+        curr_user = User.objects.get(pk=info.context.user.id)
+        return self.profile.follower.contains(curr_user)
 
 
 class ProfileNode(DjangoObjectType):
