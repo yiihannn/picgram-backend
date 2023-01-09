@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'rest_framework',
     'graphene_django',
-    'ebhealthcheck.apps.EBHealthCheckConfig'
+    'ebhealthcheck.apps.EBHealthCheckConfig',
+    'algoliasearch_django'
 ]
 
 MIDDLEWARE = [
@@ -160,6 +161,14 @@ GRAPHENE = {
         'webserver.graphql.customMiddleware.AuthorizationMiddleware',
     ],
 }
+
+ALGOLIA = {
+    'APPLICATION_ID': '7CI3VTUHVV',
+    'API_KEY': '372bfab553159fbda1f514ee2f18ff67',
+    'INDEX_PREFIX': 'photo_sharing',
+    'INDEX_SUFFIX': 'dev' if DEBUG else 'prod'
+}
+
 
 AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
