@@ -1,16 +1,16 @@
 import graphene
-import hashlib
+from algoliasearch_django import update_records, save_record
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from graphene import relay
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
-from webserver.graphql.errorMsg import ERR_INVALID_LOGIN, ERR_INVALID_SIGNUP
-from django.contrib.auth.models import User
 
-from webserver.graphql.utils import parse_global_id, encode_file_name
+from webserver.graphql.errorMsg import ERR_INVALID_LOGIN, ERR_INVALID_SIGNUP
+from webserver.graphql.schema import UserNode, ProfileNode
+from webserver.graphql.utils import parse_global_id
 from webserver.models import Profile, Photo, Comment, Tag
-from webserver.graphql.schema import UserNode, ProfileNode, CommentNode, PhotoNode, ActivityNode
 
 fs = FileSystemStorage()
 
@@ -104,10 +104,15 @@ class MakeComment(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        photo = Photo.objects.get(pk=parse_global_id(input['photo_id']))
+        qs = Photo.objects.filter(pk=parse_global_id(input['photo_id']))
+        photo = qs[0]
         curr_user = User.objects.get(pk=info.context.user.id)
         comment = Comment(user=curr_user, comment=input['content'], photo=photo)
         comment.save()
+        update_records(qs=qs, photo_comments={
+            '_operation': 'Add',
+            'value': input['content']
+        })
         return MakeComment(code=2000, msg="Make comment successfully!")
 
 
@@ -135,6 +140,7 @@ class UploadPhoto(relay.ClientIDMutation):
                 exist = Tag.objects.get(name__exact=tag)
             exist.photo.add(photo)
             exist.save()
+        save_record(photo)
         return UploadPhoto(code=2000, msg="Make comment successfully!")
 
 
@@ -163,6 +169,40 @@ class FollowUser(relay.ClientIDMutation):
         return FollowUser(code=2000, msg="Follow(or unfollow) user successfully!")
 
 
+class ChangeAvatar(relay.ClientIDMutation):
+    profile = graphene.Field(ProfileNode)
+
+    class Input:
+        newAvatar = Upload(required=True)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        new_avatar = input['newAvatar']
+        profile = Profile.objects.get(user_id=info.context.user.id)
+        profile.avatar = new_avatar
+        profile.save()
+        return ChangeAvatar(profile=profile)
+
+
+class EditProfile(relay.ClientIDMutation):
+    user = graphene.Field(UserNode)
+
+    class Input:
+        first_name = graphene.String(required=True)
+        last_name = graphene.String(required=True)
+        description = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        curr_user = User.objects.get(pk=info.context.user.id)
+        curr_user.first_name = input["first_name"]
+        curr_user.last_name = input["last_name"]
+        curr_user.profile.description = input["description"]
+        curr_user.profile.save()
+        curr_user.save()
+        return EditProfile(user=curr_user)
+
+
 class Mutation(graphene.ObjectType):
     log_in = LogIn.Field()
     sign_up = SignUp.Field()
@@ -171,3 +211,5 @@ class Mutation(graphene.ObjectType):
     make_comment = MakeComment.Field()
     upload_photo = UploadPhoto.Field()
     follow_user = FollowUser.Field()
+    change_avatar = ChangeAvatar.Field()
+    edit_profile = EditProfile.Field()

@@ -1,9 +1,10 @@
 import graphene
+from django.contrib.auth.models import User
 from graphene import relay
 from graphene_django.filter import DjangoFilterConnectionField
 
-from webserver.graphql.schema import UserNode, UserFilter, PhotoNode, PhotoFilter
 from webserver.graphql.schema import TagNode, TagFilter
+from webserver.graphql.schema import UserNode, UserFilter, PhotoNode, PhotoFilter
 
 
 class Query(graphene.ObjectType):
@@ -13,3 +14,8 @@ class Query(graphene.ObjectType):
     get_photos = DjangoFilterConnectionField(PhotoNode, filterset_class=PhotoFilter)
     tag = relay.Node.Field(TagNode)
     get_tags = DjangoFilterConnectionField(TagNode, filterset_class=TagFilter)
+    current_user = graphene.Field(UserNode)
+
+    def resolve_current_user(self, info):
+        return User.objects.get(pk=info.context.user.id)
+

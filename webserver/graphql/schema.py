@@ -98,12 +98,16 @@ class ProfileNode(DjangoObjectType):
         interfaces = (relay.Node,)
     following_count = graphene.Int()
     follower_count = graphene.Int()
+    avatar_url = graphene.String()
 
     def resolve_following_count(self, info):
         return self.following.count()
 
     def resolve_follower_count(self, info):
         return self.follower.count()
+
+    def resolve_avatar_url(self, info):
+        return self.avatar.url if self.avatar.name != "" else ""
 
 
 class TagFilter(FilterSet):
