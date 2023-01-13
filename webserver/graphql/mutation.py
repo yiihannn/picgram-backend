@@ -109,7 +109,7 @@ class MakeComment(relay.ClientIDMutation):
         curr_user = User.objects.get(pk=info.context.user.id)
         comment = Comment(user=curr_user, comment=input['content'], photo=photo)
         comment.save()
-        update_records(qs=qs, photo_comments={
+        update_records(model=Photo, qs=qs, photo_comments={
             '_operation': 'Add',
             'value': input['content']
         })
