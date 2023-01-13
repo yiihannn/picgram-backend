@@ -7,7 +7,7 @@ from graphene import relay
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 
-from webserver.graphql.errorMsg import ERR_INVALID_LOGIN, ERR_INVALID_SIGNUP
+from webserver.graphql.errorMsg import ERR_INVALID_LOGIN, ERR_INVALID_SIGNUP, ERR_INVALID_FOLLOW
 from webserver.graphql.schema import UserNode, ProfileNode
 from webserver.graphql.utils import parse_global_id
 from webserver.models import Profile, Photo, Comment, Tag
@@ -145,18 +145,19 @@ class UploadPhoto(relay.ClientIDMutation):
 
 
 class FollowUser(relay.ClientIDMutation):
-    code = graphene.Int()
-    msg = graphene.String()
+    curr_user = graphene.Field(UserNode)
+    target_user = graphene.Field(UserNode)
 
     class Input:
         user_id = graphene.String(required=True)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        if input['user_id'] == info.context.user.id:
-            return FollowUser(code=2001, msg="Invalid self-following!")
+
         user = User.objects.get(pk=parse_global_id(input['user_id']))
         curr_user = User.objects.get(pk=info.context.user.id)
+        if user == curr_user:
+            raise GraphQLError("Invalid self-following!", extensions=ERR_INVALID_FOLLOW)
         isFollowed = curr_user.profile.following.contains(user)
         if isFollowed:
             curr_user.profile.following.remove(user)
@@ -166,7 +167,7 @@ class FollowUser(relay.ClientIDMutation):
             user.profile.follower.add(curr_user)
         curr_user.save()
         user.save()
-        return FollowUser(code=2000, msg="Follow(or unfollow) user successfully!")
+        return FollowUser(curr_user=curr_user, target_user=user)
 
 
 class ChangeAvatar(relay.ClientIDMutation):
