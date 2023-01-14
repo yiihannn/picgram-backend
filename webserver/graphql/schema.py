@@ -76,15 +76,21 @@ class UserFilter(FilterSet):
 
 class UserNode(DjangoObjectType):
     user_photos = DjangoFilterConnectionField(PhotoNode, filterset_class=PhotoFilter)
+    following_photos = DjangoFilterConnectionField(PhotoNode, filterset_class=PhotoFilter)
     is_followed_by_curr = graphene.Boolean()
 
     class Meta:
         model = User
-        filter_fields = ["id", "username", "email"]
+        filter_fields = ["id", "username"]
         interfaces = (relay.Node, )
 
     def resolve_user_photos(self, info, **kwargs):
         return PhotoFilter(kwargs, queryset=self.user_photos).qs
+
+    def resolve_following_photos(self: User, info):
+        following_list = self.profile.following.values_list('id', flat=True)
+        following_photos = Photo.objects.filter(user_id__in=following_list)
+        return following_photos.order_by('-date_time')
 
     def resolve_is_followed_by_curr(self, info):
         curr_user = User.objects.get(pk=info.context.user.id)
