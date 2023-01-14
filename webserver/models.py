@@ -24,6 +24,9 @@ class Profile(models.Model):
     def global_id(self):
         return to_global_id('UserNode', self.id)
 
+    def avatar_url(self):
+        return self.avatar.url if self.avatar.name != "" else ""
+
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

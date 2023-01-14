@@ -7,7 +7,7 @@ from webserver.models import Photo, Profile
 
 @register(Profile)
 class UserIndex(AlgoliaIndex):
-    fields = ('global_id', 'username', 'first_name', 'last_name', 'description', 'occupation', 'location')
+    fields = ('global_id', 'username', 'first_name', 'last_name', 'description', 'occupation', 'location', 'avatar_url')
     settings = {'searchableAttributes': ['username', 'first_name', 'last_name',
                                          'description', 'occupation', 'location']}
     index_name = 'user'
