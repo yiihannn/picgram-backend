@@ -22,7 +22,7 @@ class Profile(models.Model):
         return self.user.last_name
 
     def global_id(self):
-        return to_global_id('UserNode', self.id)
+        return to_global_id('UserNode', self.user.id)
 
     def avatar_url(self):
         return self.avatar.url if self.avatar.name != "" else ""
