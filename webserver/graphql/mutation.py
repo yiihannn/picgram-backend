@@ -1,5 +1,5 @@
 import graphene
-from algoliasearch_django import update_records, save_record
+from algoliasearch_django import update_records, save_record, delete_record
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
@@ -204,6 +204,41 @@ class EditProfile(relay.ClientIDMutation):
         return EditProfile(user=curr_user)
 
 
+class DeletePhoto(relay.ClientIDMutation):
+    code = graphene.Int()
+    msg = graphene.String()
+
+    class Input:
+        photo_id = graphene.String(required=True)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        qs = Photo.objects.filter(pk=parse_global_id(input['photo_id']))
+        photo = qs[0]
+        delete_record(photo)
+        photo.delete()
+        return DeletePhoto(code=2001, msg="Delete photo successfully!")
+
+
+class DeleteComment(relay.ClientIDMutation):
+    code = graphene.Int()
+    msg = graphene.String()
+
+    class Input:
+        photo_id = graphene.String(required=True)
+        comment_id = graphene.String(required=True)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        qs = Photo.objects.filter(pk=parse_global_id(input['photo_id']))
+        photo = qs[0]
+        comment = Comment.objects.filter(pk=parse_global_id(input['comment_id']))
+        comment.delete()
+        comments = [c.comment for c in photo.comment_set.all()]
+        update_records(model=Photo, qs=qs, photo_comments=comments)
+        return MakeComment(code=2002, msg="Delete comment successfully!")
+
+
 class Mutation(graphene.ObjectType):
     log_in = LogIn.Field()
     sign_up = SignUp.Field()
@@ -214,3 +249,6 @@ class Mutation(graphene.ObjectType):
     follow_user = FollowUser.Field()
     change_avatar = ChangeAvatar.Field()
     edit_profile = EditProfile.Field()
+    delete_photo = DeletePhoto.Field()
+    delete_comment = DeleteComment.Field()
+
