@@ -28,7 +28,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     'picgram.net',
-    'photoSharing-dev.us-west-2.elasticbeanstalk.com'
+    'photoSharing-dev.us-west-2.elasticbeanstalk.com',
+    '.vercel.app'
 ]
 
 # Application definition
@@ -76,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'photoSharing.wsgi.application'
+WSGI_APPLICATION = 'photoSharing.wsgi.app'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -90,6 +91,16 @@ if 'RDS_HOSTNAME' in os.environ:
             'PASSWORD': os.environ['RDS_PASSWORD'],
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
+        }
+    }
+elif 'POSTGRES_HOST' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['POSTGRES_DATABASE'],
+            'USER': os.environ['POSTGRES_USER'],
+            'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+            'HOST': os.environ['POSTGRES_HOST'],
         }
     }
 else:

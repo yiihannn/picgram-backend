@@ -1,21 +1,24 @@
-algoliasearch==2.6.3
-algoliasearch-django==2.0.0
+algoliasearch==3.0.0
+algoliasearch-django==3.0.0
 aniso8601==9.0.1
 asgiref==3.6.0
 boto3==1.26.41
 botocore==1.29.41
-certifi==2022.12.7
+certifi @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_b64zphacdv/croot/certifi_1683875375103/work/certifi
 cffi==1.15.1
 charset-normalizer==2.1.1
+contourpy @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_17gskqgptz/croots/recipe/contourpy_1663827415320/work
 cryptography==39.0.0
+cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
 Django==4.1.3
 django-ebhealthcheck==2.0.2
 django-filter==22.1
-django-storages==1.13.2
+django-storages==1.14.1
 djangorestframework==3.14.0
 djongo==1.3.6
 dnspython==2.2.1
 Faker==15.3.4
+fonttools==4.25.0
 graphene==3.2.1
 graphene-django==3.0.0
 graphene-file-upload==1.3.0
@@ -23,20 +26,30 @@ graphql-core==3.2.3
 graphql-relay==3.2.0
 idna==3.4
 jmespath==1.0.1
+kiwisolver @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_e26jwrjf6j/croot/kiwisolver_1672387151391/work
+matplotlib @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_41fhwn4tj9/croot/matplotlib-suite_1679593479845/work
+mkl-fft==1.3.6
+mkl-random @ file:///Users/ec2-user/mkl/mkl_random_1682994911338/work
+mkl-service==2.4.0
 mongoengine==0.24.2
+munkres==1.1.4
+numpy @ file:///Users/ec2-user/mkl/numpy_and_numpy_base_1682973769567/work
+packaging @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_c3zlhpboab/croot/packaging_1678965318579/work
 Pillow==9.4.0
 promise==2.3
 psycopg2-binary==2.9.5
 pycparser==2.21
 PyJWT==1.7.1
 pymongo==3.12.3
-python-dateutil==2.8.2
+pyparsing @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_3a17y2delq/croots/recipe/pyparsing_1661452538853/work
+python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
 pytz==2021.3
 requests==2.28.1
 Rx==1.6.3
 s3transfer==0.6.0
 singledispatch==3.7.0
-six==1.16.0
+six @ file:///tmp/build/80754af9/six_1644875935023/work
 sqlparse==0.2.4
 text-unidecode==1.3
+tornado @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_1fimz6o0gc/croots/recipe/tornado_1662061695695/work
 urllib3==1.26.13
